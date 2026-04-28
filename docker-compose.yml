@@ -1,0 +1,12 @@
+services:
+  frontend:
+    image: eyeriswho/frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  backend:
+    image: eyeriswho/backend
+    env_file:
+      - .env

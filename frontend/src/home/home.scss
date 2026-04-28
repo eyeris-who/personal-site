@@ -1,0 +1,298 @@
+@mixin hover-effect($transform) {
+  transition: transform 0.2s ease, filter 0.2s ease;
+  &:hover {
+    transform: $transform;
+    filter: brightness(1.05) drop-shadow(4px 6px 8px rgba(0, 0, 0, 0.25));
+  }
+}
+
+// ── App Layout ────────────────────────────────────────────────
+.app-layout {
+  display: flex;
+  height: 100vh;
+  overflow-x: visible;
+  overflow-y: hidden;
+}
+
+.left-panel {
+  flex: 1;
+  padding: 1rem;
+  padding-right: calc(var(--binder-margin-width, 0) + 1rem);
+  overflow-x: visible;
+  overflow-y: hidden;
+  background-image: url('../assets/binder-cover.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+
+  .margin-img {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    transform: scaleX(-1);
+    z-index: 1;
+  }
+}
+
+.right-panel {
+  flex: 1;
+  padding-left: calc(var(--page-margin-width, 0));
+  overflow-x: visible;
+  overflow-y: hidden;
+  background-color: rgb(247, 247, 240);
+  background-image: url('../assets/page-lines.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  text-align: left;
+
+  .margin-img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 1;
+  }
+}
+
+.home-content {
+  height: 100%;
+}
+
+// ── Base styles for below lg ───────────────────────────────────
+.container {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  overflow: visible;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.title {
+  width: 60%;
+  margin: 20px auto 0;
+  display: block;
+  z-index: 20;
+}
+
+.about-me,
+.projects,
+.contact-me {
+  width: 60%;
+  margin: 0 auto;
+  display: block;
+  transition: transform 0.2s ease, filter 0.2s ease;
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  &:hover {
+    filter: brightness(1.05) drop-shadow(4px 6px 8px rgba(0, 0, 0, 0.25));
+  }
+}
+
+// ── Mobile (< lg): hide left panel ─────────────────────────────
+@media (max-aspect-ratio: 960/850) {
+  .left-panel {
+    display: none;
+  }
+  .right-panel {
+    flex: 1;
+    background: none;
+    padding: 1rem;
+    padding-left: 1rem;
+  }
+
+  .container {
+    justify-content: flex-start;
+    gap: 0;
+  }
+
+  .title {
+    left: 0;
+    right: 0;
+    margin: 20px auto 0;
+    width: min(80%, 40vh);
+  }
+
+  .about-me,
+  .projects,
+  .contact-me {
+    position: absolute;
+    margin: 0;
+  }
+
+  .about-me {
+    width: min(100%, 52vh);
+    left: 50%;
+    transform: translateX(-50%) rotate(-4deg);
+    z-index: 5;
+    @include hover-effect(translateX(-60%) rotate(-7deg) scale(1.03));
+  }
+
+  .contact-me {
+    width: min(30%, 17vh);
+    top: min(40vh, 65vw, 370px);
+    transform: translateX(-100%) rotate(5deg);
+    z-index: 9;
+    @include hover-effect(translateX(-100%) rotate(-8deg) scale(1.08));
+  }
+
+  .projects {
+    width: min(70%, 37vh);
+    top: min(32vh, 50vw, 290px);
+    transform: translateX(35%) rotate(-20deg);
+    z-index: 8;
+    @include hover-effect(translateX(35%) rotate(-13deg) scale(1.04));
+  }
+}
+
+// ── lg+: horizontal row ─────────────────────────────────────────
+@media (min-aspect-ratio: 960/850) {
+  .container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 3rem;
+    padding: 2rem;
+  }
+
+  .title {
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .about-me,
+  .projects,
+  .contact-me {
+    position: relative;
+    width: 250px;
+    margin: 0;
+    top: auto; left: auto; right: auto; bottom: auto;
+    transform: none;
+  }
+
+  .about-me   { @include hover-effect(translateY(-4px) scale(1.03)); }
+  .projects   { @include hover-effect(translateY(-4px) scale(1.04)); }
+  .contact-me { @include hover-effect(translateY(-4px) scale(1.08)); }
+
+  .left-panel .container {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0;
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .left-panel .title {
+    position: static;
+    left: unset;
+    transform: none;
+    width: min(80%, 40vh);
+    margin: 20px auto 0;
+    flex-shrink: 0;
+  }
+
+  .left-panel .about-me,
+  .left-panel .projects,
+  .left-panel .contact-me {
+    position: absolute;
+    margin: 0;
+  }
+
+  .left-panel .about-me {
+    width: min(100%, 52vh);
+    left: 50%;
+    transform: translateX(-50%) rotate(-4deg);
+    z-index: 5;
+    @include hover-effect(translateX(-50%) rotate(-7deg) scale(1.03));
+  }
+
+  .left-panel .contact-me {
+    width: min(30%, 17vh);
+    top: min(42vh, 65vw, 340px);
+    transform: translateX(-100%) rotate(5deg);
+    z-index: 9;
+    @include hover-effect(translateX(-100%) rotate(-8deg) scale(1.08));
+  }
+
+  .left-panel .projects {
+    width: min(70%, 37vh);
+    top: min(35vh, 40vw, 300px);
+    transform: translateX(35%) rotate(-20deg);
+    z-index: 8;
+    @include hover-effect(translateX(35%) rotate(-13deg) scale(1.04));
+  }
+
+  .right-panel .container {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    margin: 0;
+    position: relative;
+    padding: 0;           
+    max-width: none;       // add this
+  }
+}
+
+// ── SPA Section Styling ────────────────────────────────────────
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;     // was: center
+  width: 100%;
+
+  h1 {
+    font-size: calc(100vh / 10);  // was: 2rem
+    text-align: left;             // was: center
+    margin: calc(100vh / 18) 0 0;
+  }
+
+  p {
+    font-size: calc(100vh / 24);  // was: 1rem
+    margin: 0;
+    text-align: left;             // was: center
+  }
+}
+
+.back-button {
+  align-self: flex-start;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
