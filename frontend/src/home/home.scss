@@ -43,8 +43,8 @@
   overflow-y: hidden;
   background-color: rgb(247, 247, 240);
   background-image: url('../assets/page-lines.png');
-  background-size: 100% 100%;
-  background-position: center;
+  background-size: 100% 90%;
+  background-position: left bottom;
   background-repeat: no-repeat;
   position: relative;
   text-align: left;
@@ -111,8 +111,6 @@
   .right-panel {
     flex: 1;
     background: none;
-    padding: 1rem;
-    padding-left: 1rem;
   }
 
   .container {

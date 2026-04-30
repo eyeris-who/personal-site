@@ -1,45 +1,40 @@
 import './canvas.scss';
 import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import pencilImg from '../../assets/pencil.png';
+import eraserImg from '../../assets/eraser.png';
+import pencilCursorSrc from '../../assets/pencil-cursor.png';
+import eraserCursorSrc from '../../assets/eraser-cursor.png';
 
-const PencilIcon = ({ active }) => (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
-            fill={active ? '#fff' : '#555'}
-        />
-    </svg>
-);
+// Resizes any image URL to max 64x64 and returns a data URL safe to use as cursor
+function buildCursorDataURL(src) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+            const MAX = 64;
+            const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+            const w = Math.floor(img.width * scale);
+            const h = Math.floor(img.height * scale);
+            const c = document.createElement('canvas');
+            c.width = w;
+            c.height = h;
+            c.getContext('2d').drawImage(img, 0, 0, w, h);
+            resolve(c.toDataURL('image/png'));
+        };
+        img.onerror = () => resolve(null);
+        img.src = src;
+    });
+}
 
-const EraserIcon = ({ active }) => (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-            d="M16.24 3.56l4.24 4.24c.78.78.78 2.05 0 2.83L12 19.1H8l-4.95-4.95c-.78-.78-.78-2.05 0-2.83L13.41 2.7a2 2 0 0 1 2.83.86zM4 21h16"
-            stroke={active ? '#fff' : '#555'}
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        />
-        <path
-            d="M15 5L19 9"
-            stroke={active ? '#fff' : '#555'}
-            strokeWidth="2"
-            strokeLinecap="round"
-        />
-    </svg>
-);
-
-// forwardRef lets the parent (ContactMe) call canvasRef.current.getDataURL()
-const Canvas = forwardRef(({ messageProps }, ref) => {
+const Canvas = forwardRef((_props, ref) => {
     const [isDrawing, setIsDrawing] = useState(false);
     const [mode, setMode] = useState('draw');
     const canvasRef = useRef(null);
     const contextRef = useRef(null);
-    const hasDrawnRef = useRef(false); // track whether user drew anything
+    const hasDrawnRef = useRef(false);
+    const cursorsRef = useRef({ pencil: null, eraser: null });
     const DEFAULT_LINE_WIDTH = 5;
 
-    // Expose getDataURL() to parent via ref
     useImperativeHandle(ref, () => ({
-        // Returns a PNG data URL if the user drew something, otherwise null
         getDataURL() {
             if (!hasDrawnRef.current) return null;
             return canvasRef.current.toDataURL('image/png');
@@ -49,11 +44,31 @@ const Canvas = forwardRef(({ messageProps }, ref) => {
         },
     }));
 
-    const getPointerPosition = ({ clientX, clientY }) => {
+    // Pre-build safe cursor data URLs once on mount
+    useEffect(() => {
+        Promise.all([
+            buildCursorDataURL(pencilCursorSrc),
+            buildCursorDataURL(eraserCursorSrc),
+        ]).then(([pencil, eraser]) => {
+            cursorsRef.current = { pencil, eraser };
+            // Apply initial cursor
+            if (canvasRef.current && pencil) {
+                canvasRef.current.style.cursor = `url(${pencil}) 0 32, crosshair`;
+            }
+        });
+    }, []);
+
+    // Apply cursor whenever mode changes
+    useEffect(() => {
         const canvas = canvasRef.current;
-        const rect = canvas.getBoundingClientRect();
-        return { x: clientX - rect.left, y: clientY - rect.top };
-    };
+        if (!canvas) return;
+        const { pencil, eraser } = cursorsRef.current;
+        if (mode === 'erase' && eraser) {
+            canvas.style.cursor = `url(${eraser}) 0 32, cell`;
+        } else if (pencil) {
+            canvas.style.cursor = `url(${pencil}) 0 32, crosshair`;
+        }
+    }, [mode]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -85,6 +100,12 @@ const Canvas = forwardRef(({ messageProps }, ref) => {
             context.strokeStyle = 'rgba(0,0,0,1)';
         }
     }, [mode]);
+
+    const getPointerPosition = ({ clientX, clientY }) => {
+        const canvas = canvasRef.current;
+        const rect = canvas.getBoundingClientRect();
+        return { x: clientX - rect.left, y: clientY - rect.top };
+    };
 
     const startDrawing = ({ nativeEvent }) => {
         const { x, y } = getPointerPosition(nativeEvent);
@@ -119,34 +140,7 @@ const Canvas = forwardRef(({ messageProps }, ref) => {
 
     return (
         <div className="canvas-outer">
-            <textarea
-                className="canvas-message-input"
-                placeholder="Send a message and attach a drawing"
-                rows={2}
-                {...messageProps}
-            />
-
             <div className="canvas-wrapper">
-                <div className="canvas-controls">
-                    <div className="control-group mode-group">
-                        <button
-                            onClick={() => setMode('draw')}
-                            className={`icon-btn ${mode === 'draw' ? 'active' : ''}`}
-                            title="Draw"
-                        >
-                            <PencilIcon active={mode === 'draw'} />
-                        </button>
-                        <button
-                            onClick={() => setMode('erase')}
-                            className={`icon-btn ${mode === 'erase' ? 'active' : ''}`}
-                            title="Erase"
-                        >
-                            <EraserIcon active={mode === 'erase'} />
-                        </button>
-                        <button className="clear-btn" onClick={clearCanvas} title="Clear canvas">✕</button>
-                    </div>
-                </div>
-
                 <canvas
                     className="canvas-container"
                     ref={canvasRef}
@@ -154,8 +148,22 @@ const Canvas = forwardRef(({ messageProps }, ref) => {
                     onMouseMove={draw}
                     onMouseUp={stopDrawing}
                     onMouseLeave={stopDrawing}
-                    style={{ cursor: mode === 'erase' ? 'cell' : 'crosshair' }}
                 />
+                <button
+                    onClick={() => setMode('draw')}
+                    className={`canvas-icon-btn pencil-btn ${mode === 'draw' ? 'active' : ''}`}
+                    title="Draw"
+                >
+                    <img src={pencilImg} alt="Draw" />
+                </button>
+                <button
+                    onClick={() => setMode('erase')}
+                    className={`canvas-icon-btn eraser-btn ${mode === 'erase' ? 'active' : ''}`}
+                    title="Erase"
+                >
+                    <img src={eraserImg} alt="Erase" />
+                </button>
+                <button className="canvas-clear-btn" onClick={clearCanvas} title="Clear canvas">✕</button>
             </div>
         </div>
     );

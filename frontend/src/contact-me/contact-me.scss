@@ -1,0 +1,201 @@
+$bp-large: 1024px;
+
+// ─── Contact Section ──────────────────────────────────────────
+.contact-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;   // left-align at all sizes
+    min-height: 100vh;
+}
+
+// ─── Nav stickers ─────────────────────────────────────────────
+.stickers {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+
+    img {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+    }
+}
+
+// ─── Heading ──────────────────────────────────────────────────
+.contact-heading {
+    position: absolute;
+    left: 0;
+    top: 10%;
+    transform: translateY(-70%);
+    margin: 0;
+    font-size: clamp(2rem, 6vw, 3rem);
+    letter-spacing: 0.02em;
+}
+
+// ─── Form ─────────────────────────────────────────────────────
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;   // left-align form contents
+    margin-top: 10vh;
+    width: 100%;
+    max-width: 520px;
+}
+
+// ─── Papers stack ─────────────────────────────────────────────
+.papers-stack {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 100px;
+}
+
+// ─── Torn-paper wrapper (shared) ──────────────────────────────
+.torn-paper-wrapper {
+    position: relative;
+    width: 100%;
+
+    .torn-paper-bg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        inset: 0;
+        object-fit: fill;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .tape {
+        position: absolute;
+        pointer-events: none;
+        user-select: none;
+        z-index: 2;
+
+        &.tape-tl { width: 100px; top: 120px;    left: -20px;  transform: rotate(-12deg); }
+        &.tape-tr { width: 70px;  top: -5px;     right: 5px;   transform: rotate(10deg);  }
+        &.tape-br { width: 250px; bottom: -10px; right: -70px; transform: rotate(-50deg); }
+    }
+
+    // small paper: always left-anchored
+    &.small-paper {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        left: 0;               // ← pin to left edge
+        padding: 0 10%;
+        max-width: 420px;
+        width: 60%;
+    }
+
+    &.large-paper {
+        position: relative;
+        z-index: 1;
+        min-height: 400px;
+    }
+}
+
+// ─── Paper fields ─────────────────────────────────────────────
+.paper-fields {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 28px 24px;
+}
+
+%paper-text-base {
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1.3rem;
+    font-weight: 700;          // bold when filled in
+    padding: 2px 4px;
+    box-sizing: border-box;
+    font-family: inherit;
+
+    &::placeholder {
+        color: #b89e8a;
+        font-weight: 400;      // placeholder stays light
+    }
+}
+
+.paper-input {
+    @extend %paper-text-base;
+    resize: none;
+
+    &.paper-textarea {
+        min-height: 72px;
+    }
+}
+
+// dashed ruled-line separator
+.paper-divider {
+    width: 100%;
+    height: 1px;
+    margin: 2px 0;
+    opacity: 0.55;
+    background: repeating-linear-gradient(
+        90deg,
+        #c9b8a8 0px,
+        #c9b8a8 6px,
+        transparent 6px,
+        transparent 12px
+    );
+}
+
+// ─── Canvas area ──────────────────────────────────────────────
+.paper-canvas-area {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+}
+
+// ─── Tape send button ─────────────────────────────────────────
+.send-tape-btn {
+    // tape strip look
+    display: inline-block;
+    background: rgba(200, 187, 150, 0.55);
+    border: none;
+    padding: 5px 28px;
+    font-family: inherit;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transform: rotate(-1.5deg);
+    transition: transform 0.15s ease, filter 0.15s ease;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(0,0,0,0.06);
+    margin-top: -60px;
+    z-index: 5;
+
+    &:hover:not(:disabled) {
+        transform: rotate(-1.5deg) scale(1.06);
+    }
+
+    &:active:not(:disabled) {
+        transform: rotate(-1.5deg) scale(0.97);
+        filter: none;
+    }
+
+    &:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+}
+
+// ─── Feedback ─────────────────────────────────────────────────
+.form-feedback {
+    font-size: 1rem;
+    margin: 5px 0;
+    font-family: inherit;
+    z-index: 5;
+
+    &.success { color: #4a7c59; }
+    &.error   { color: #b94a48; }
+}
