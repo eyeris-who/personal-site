@@ -10,7 +10,7 @@
 .app-layout {
   display: flex;
   height: 100vh;
-  overflow-x: visible;
+  overflow-x: hidden;
   overflow-y: hidden;
 }
 
@@ -18,7 +18,7 @@
   flex: 1;
   padding: 1rem;
   padding-right: calc(var(--binder-margin-width, 0) + 1rem);
-  overflow-x: visible;
+  overflow-x: hidden;
   overflow-y: hidden;
   background-image: url('../assets/binder-cover.png');
   background-size: 100% 100%;
@@ -39,7 +39,7 @@
 .right-panel {
   flex: 1;
   padding-left: calc(var(--page-margin-width, 0));
-  overflow-x: visible;
+  overflow-x: hidden;
   overflow-y: hidden;
   background-color: rgb(247, 247, 240);
   background-image: url('../assets/page-lines.png');

@@ -101,10 +101,17 @@ const Canvas = forwardRef((_props, ref) => {
         }
     }, [mode]);
 
-    const getPointerPosition = ({ clientX, clientY }) => {
+    const getPointerPosition = (nativeEvent) => {
         const canvas = canvasRef.current;
         const rect = canvas.getBoundingClientRect();
-        return { x: clientX - rect.left, y: clientY - rect.top };
+        // touch events to expose clientX/Y
+        const clientX = nativeEvent.touches
+            ? nativeEvent.touches[0].clientX
+            : nativeEvent.clientX;
+        const clientY = nativeEvent.touches
+            ? nativeEvent.touches[0].clientY
+            : nativeEvent.clientY;
+        return { x: clientX- rect.left, y: clientY - rect.top };
     };
 
     const startDrawing = ({ nativeEvent }) => {
@@ -148,6 +155,10 @@ const Canvas = forwardRef((_props, ref) => {
                     onMouseMove={draw}
                     onMouseUp={stopDrawing}
                     onMouseLeave={stopDrawing}
+                    onTouchStart={startDrawing}
+                    onTouchMove={draw}
+                    onTouchEnd={stopDrawing}
+                    onTouchCancel={stopDrawing}
                 />
                 <button
                     onClick={() => setMode('draw')}

@@ -7,7 +7,7 @@
 
 body {
   height: 100vh;
-  overflow-x: visible;
+  overflow-x: hidden;
   overflow-y: hidden;
   background-color: rgb(247, 247, 240);
   margin: 0;
@@ -31,7 +31,7 @@ body.home-page {
 
 #root {
   height: 100%;
-  overflow-x: visible;
+  overflow-x: hidden;
   overflow-y: hidden;
 }
 
@@ -39,7 +39,7 @@ body.home-page {
   display: flex;
   height: 100vh;
   max-width: none;
-  overflow-x: visible;
+  overflow-x: hidden;
   overflow-y: hidden;
 }
 
@@ -47,7 +47,7 @@ body.home-page {
   flex: 1;
   min-width: 0; /* prevents flex blowout */
   position: relative;
-  overflow-x: visible;
+  overflow-x: hidden;
   overflow-y: hidden;
 }
 
