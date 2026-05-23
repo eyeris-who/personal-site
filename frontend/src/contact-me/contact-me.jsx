@@ -58,7 +58,7 @@ function ContactMe({ setCurrentSection, isLargeScreen }) {
                 </div>
             )}
 
-            <h1 className="contact-heading">Contact Me</h1>
+            <h1>Contact Me</h1>
 
             <form onSubmit={sendEmail} className="contact-form">
                 <div className="papers-stack">

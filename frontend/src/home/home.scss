@@ -267,9 +267,13 @@
   width: 100%;
 
   h1 {
-    font-size: calc(100vh / 10);  // was: 2rem
-    text-align: left;             // was: center
-    margin: calc(100vh / 18) 0 0;
+    position: absolute;
+    left: 0;
+    top: 10%;
+    transform: translateY(-70%);
+    margin: 0;
+    font-size: clamp(2rem, 6vw, 3rem);
+    letter-spacing: 0.02em;
   }
 
   p {

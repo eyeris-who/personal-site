@@ -24,17 +24,6 @@ $bp-large: 1024px;
     }
 }
 
-// ─── Heading ──────────────────────────────────────────────────
-.contact-heading {
-    position: absolute;
-    left: 0;
-    top: 10%;
-    transform: translateY(-70%);
-    margin: 0;
-    font-size: clamp(2rem, 6vw, 3rem);
-    letter-spacing: 0.02em;
-}
-
 // ─── Form ─────────────────────────────────────────────────────
 .contact-form {
     display: flex;

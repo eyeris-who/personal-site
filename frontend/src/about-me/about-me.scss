@@ -1,0 +1,68 @@
+// ── Main content ───────────────────────────────────────────────
+.about-content {
+  width: 100%;
+}
+
+// ── Photo block ────────────────────────────────────────────────
+.photo-wrapper {
+  position: relative;
+  width: 15vw;
+  float: left;
+  margin-top: 6rem;
+  margin-right: 1.5rem;
+  margin-bottom: 1rem;
+
+  .photo-me {
+    display: block;
+    width: 100%;
+    border-radius: 2px;
+  }
+
+  .photo-tape {
+    position: absolute;
+    width: 8vw;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.85;
+
+    &--tl { top: -15px;  left: -35px;  transform: rotate(-60deg); }
+    &--br { bottom: -15px; right: -30px; transform: rotate(100deg); }
+  }
+}
+
+// ── Bio text wraps around the float ───────────────────────────
+.bio {
+  p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+}
+
+// clear float after content
+.about-content::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+// ── Eraser icon ────────────────────────────────────────────────
+.photo-eraser {
+  position: absolute;
+  bottom: -10px;
+  left: -30px;
+  width: 70px;
+  cursor: pointer;
+  transform: rotate(-15deg);
+  transition: transform 0.18s ease, filter 0.18s ease;
+  z-index: 5;
+
+  &:hover {
+    transform: rotate(-15deg) scale(1.12);
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
+  }
+
+  &--active {
+    transform: rotate(-15deg) scale(1.2);
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.45));
+  }
+}

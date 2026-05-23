@@ -1,5 +1,5 @@
 import React from 'react';
-import './projects.css';
+import './projects.scss';
 import titleImg from '../assets/title.png';
 import AboutMeImg from '../assets/about-me.png';
 import ContactMeImg from '../assets/contact-me.png';
