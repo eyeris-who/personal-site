@@ -1,16 +1,46 @@
+// ── Section: scrollable container ─────────────────────────────
+.section {
+  position: relative;
+  height: 100vh;
+}
+
+// ── Nav stickers ───────────────────────────────────────────────
+.stickers {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 5px;
+  z-index: 10;
+
+  img {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
+}
+
 // ── Main content ───────────────────────────────────────────────
 .about-content {
   width: 100%;
+  margin-top: 15vh; /* Moves the container and scrollbar down */
+  max-height: 90vh; /* 90vh minus the 15vh margin */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
 }
 
 // ── Photo block ────────────────────────────────────────────────
 .photo-wrapper {
   position: relative;
-  width: 15vw;
+  width: clamp(120px, 15vw, 260px);
   float: left;
-  margin-top: 6rem;
+  margin-top: 0;
   margin-right: 1.5rem;
   margin-bottom: 1rem;
+
+  // leave room for tape sticking out on left/right
+  margin-left: 2%;
 
   .photo-me {
     display: block;
@@ -18,15 +48,33 @@
     border-radius: 2px;
   }
 
+  // tape: % offsets so they scale with the photo
   .photo-tape {
     position: absolute;
-    width: 8vw;
+    width: 40%;
     pointer-events: none;
-    z-index: 2;
+    z-index: 100;
     opacity: 0.85;
 
-    &--tl { top: -15px;  left: -35px;  transform: rotate(-60deg); }
-    &--br { bottom: -15px; right: -30px; transform: rotate(100deg); }
+    &--tl {
+      top: -4%;
+      left: -14%;
+      transform: rotate(-60deg);
+    }
+
+    &--br {
+      bottom: -12%;
+      right: -18%;
+      transform: rotate(100deg);
+    }
+  }
+}
+
+// ── Mobile: wider photo ────────────────────────────────────────
+@media (max-aspect-ratio: 960/850) {
+  .photo-wrapper {
+    width: clamp(120px, 40vw, 220px);
+    margin-left: 4%;
   }
 }
 
@@ -38,7 +86,7 @@
   }
 }
 
-// clear float after content
+// clearfix
 .about-content::after {
   content: '';
   display: block;
@@ -50,7 +98,7 @@
   position: absolute;
   bottom: -10px;
   left: -30px;
-  width: 70px;
+  width: clamp(40px, 5vw, 70px);
   cursor: pointer;
   transform: rotate(-15deg);
   transition: transform 0.18s ease, filter 0.18s ease;
