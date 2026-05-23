@@ -15,7 +15,7 @@ function Projects({ setCurrentSection, isLargeScreen }) {
         </div>
       )}
       <h1>Projects</h1>
-      <p>
+      <p className="project-text">
         A work in progress...
         <br /><br />
 
